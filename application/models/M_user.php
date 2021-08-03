@@ -28,4 +28,10 @@ class M_user extends CI_Model
             ->get('users')->row_array();
         return $user;
     }
+    public function deleteUser($id)
+    {
+        $this->db
+            ->where('user_id', $id)
+            ->delete('users');
+    }
 }

@@ -29,14 +29,35 @@ class DataMaster extends CI_Controller
     public function tambahKaryawan()
     {
         $data = [
-            'content'       => 'data_master/tambah_karyawan',
+            'action'        => 'Tambah',
+            'content'       => 'data_master/form_karyawan',
             'head'          => 'Data Master', // untuk sidebar agar menu aktif jika sama (samakan dengan nama)
             'title'         => 'tambah karyawan',
             'position'      => $this->db->get('position')->result_array(),
             'level'         => $this->db->get('users_level')->result_array(),
-            'user'          => getUserAndLevel($this->session->userdata('login')['email'])
+            'user'          => getUserAndLevel($this->session->userdata('login')['email']) // utk profil navbar
         ];
         $this->load->view('templates/master', $data);
+    }
+    public function editKaryawan($user_id)
+    {
+        $data = [
+            'action'        => 'Edit',
+            'content'       => 'data_master/form_karyawan',
+            'head'          => 'Data Master', // untuk sidebar agar menu aktif jika sama (samakan dengan nama)
+            'title'         => 'tambah karyawan',
+            'position'      => $this->db->get('position')->result_array(),
+            'level'         => $this->db->get('users_level')->result_array(),
+            'user'          => getUserAndLevel($this->session->userdata('login')['email']), // utk profil navbar
+            'karyawan'      => $this->user->getUser('user_id', $user_id)
+        ];
+        $this->load->view('templates/master', $data);
+    }
+
+    public function deleteKaryawan()
+    {
+        $this->user->deleteUser($this->input->post('user_id'));
+        echo "Berhasil dihapus";
     }
 
     public function prosesTambahKaryawan()
@@ -76,6 +97,12 @@ class DataMaster extends CI_Controller
         $this->db->insert('users', $dataInsert);
         $data['status'] = TRUE;
         echo json_encode($data);
+    }
+
+    public function fetchKaryawan()
+    {
+        $karyawan = getUserAndPosition();
+        echo json_encode($karyawan);
     }
 
     private function _validate()
