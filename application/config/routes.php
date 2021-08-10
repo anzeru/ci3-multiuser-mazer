@@ -50,5 +50,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'auth';
-$route['404_override'] = '';
+$route['datamaster/menu'] = 'menu';
+$route['menu'] = 'errors';
+$route['datamaster/jabatan'] = 'position';
+$route['position'] = 'errors';
+$route['404_override'] = 'errors';
 $route['translate_uri_dashes'] = FALSE;

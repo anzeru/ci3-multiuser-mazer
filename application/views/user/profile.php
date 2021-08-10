@@ -27,7 +27,7 @@
             <div class="row col-md-9">
                 <div class="card-content">
                     <div class="card-body">
-                        <form class="form">
+                        <form id="form" class="form">
                             <div class="row">
                                 <!-- NIK -->
                                 <div class="col-md-6 col-12">
@@ -145,7 +145,6 @@
                                         <div class="input-group mb-3 error">
                                             <label class="input-group-text picture" for="picture"><i class="bi bi-upload"></i></label>
                                             <input type="file" class="form-control" id="picture" name="picture">
-
                                         </div>
                                     </div>
                                 </div>
@@ -164,7 +163,9 @@
                                     </div>
                                 </div>
                                 <div class="col-12 d-flex justify-content-end">
-                                    <button id="add" type="submit" class="btn btn-primary me-1 mb-1 add">Simpan</button>
+                                    <input id="btn_edit" type="button" class="btn btn-primary me-1 mb-1 btn-edit" value="Ubah">
+                                    <input id="btn_save" type="submit" class="btn btn-primary me-1 mb-1 btn-save" value="Simpan" style="display: none;">
+                                    <input type="button" class="btn btn-danger me-1 mb-1 btn-cancel" value="Batal" style="display: none;">
                                     <button class="btn btn-primary load" type="button" disabled style="display: none;">
                                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                         Proses
@@ -178,3 +179,84 @@
         </div>
     </div>
 </section>
+
+<script>
+    $(document).ready(function() {
+        $('#form :input').prop('disabled', true)
+        $('.btn-edit').prop('disabled', false)
+        $('.btn-save').prop('disabled', false)
+        $('.btn-cancel').prop('disabled', false)
+
+        $('.btn-edit').on('click', function() {
+            event.preventDefault()
+            $('#form :input').prop('disabled', false)
+            $(this).hide()
+            $('.btn-save').show()
+            $('.btn-cancel').show()
+        })
+
+        $('.btn-cancel').on('click', function() {
+            event.preventDefault()
+            $('#form :input').prop('disabled', true)
+            $('.btn-cancel').hide()
+            $('.btn-edit').show()
+            $('.btn-edit').prop('disabled', false)
+            $('.btn-save').hide()
+        })
+
+        $('#form').on('submit', function() {
+            event.preventDefault()
+            var formdata = new FormData($('#form')[0]);
+            Swal.fire({
+                title: 'Konfirmasi' + name,
+                text: "Yakin mengubah data ?",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ubah!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '<?= base_url('user/edit') ?>',
+                        type: 'post',
+                        data: formdata,
+                        contentType: false,
+                        cache: false,
+                        processData: false, // wajib
+                        dataType: 'json',
+                        beforeSend: function() {
+                            $('.load').show()
+                            $('.btn-save').hide()
+                            $('.btn-cancel').hide()
+                        },
+                        success: function(result) {
+                            if (result.status) {
+                                $('.btn-edit').show()
+                                $('#form :input').prop('disabled', true)
+                                $('.btn-edit').prop('disabled', false)
+                                $('.load').hide()
+                                $('.btn-save').prop('disabled', false)
+                                $('.btn-cancel').prop('disabled', false)
+                            } else {
+                                for (let i = 0; i < result.input.length; i++) {
+                                    $('#' + result.input[i]).change(function() {
+                                        $('#' + result.input[i]).removeClass('is-invalid')
+                                    })
+                                    $('#' + result.input[i]).addClass('is-invalid');
+                                    $('#' + result.input[i]).closest('.error').append('<div></div>');
+                                    $('#' + result.input[i]).next().text(result.message[i]).addClass('invalid-feedback')
+                                    $('.load').hide();
+                                    $('.add').show();
+                                }
+                            }
+
+                        }
+                    })
+                }
+            })
+
+        })
+    })
+</script>

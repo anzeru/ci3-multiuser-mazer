@@ -34,4 +34,10 @@ class M_user extends CI_Model
             ->where('user_id', $id)
             ->delete('users');
     }
+
+    public function updateUser($user_id, $data)
+    {
+        return $this->db->where('user_id', $user_id)
+            ->update('users', $data);
+    }
 }

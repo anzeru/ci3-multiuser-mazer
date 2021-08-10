@@ -22,14 +22,14 @@ function is_logged_in($level_id)
         ]);
 
         if ($userAccess->num_rows() < 1) {
-            redirect('auth/blocked');
+            redirect('errors');
         }
     }
 }
 
 function getQueryMenu($level_id)
 {
-    $CI = &get_instance();
+    $CI = get_instance();
     $queryMenu = "SELECT `menu`.`menu_id`, `menu`, `url`, `icon`
                 FROM `menu` JOIN `users_access_menu`
                 ON `menu`.`menu_id` = `users_access_menu`.`menu_id`

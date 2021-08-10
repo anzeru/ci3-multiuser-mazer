@@ -168,6 +168,18 @@
                 event.preventDefault();
             }
         });
+        $("#nik").on("keypress", function(event) {
+            $(this).val($(this).val().replace(/[^\d].+/, ""));
+            if ((event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+        $("#phone").on("keypress", function(event) {
+            $(this).val($(this).val().replace(/[^\d].+/, ""));
+            if ((event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
         checkPicture()
 
         function checkPicture() {
@@ -242,6 +254,24 @@
                 }
             })
         })
+        limitDate()
+
+        function limitDate() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd // membuat tanggal yang 1 digit menjadi 2 digit (1-9)
+            }
+            console.log(dd)
+            if (mm < 10) {
+                mm = '0' + mm // membuat bulan yang 1 digit menjadi 2 digit (1-9)
+            }
+            today = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("date_joined").setAttribute("max", today);
+            document.getElementById("birth_date").setAttribute("max", today);
+        }
 
 
     })

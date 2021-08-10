@@ -5,7 +5,7 @@
                  <div class="col-md-10">
                      <h4 class="card-title"><?= ucfirst($title) ?></h4>
                  </div>
-                 <div class="col-md-2 float-right">
+                 <div class="col-lg-2">
                      <a href="<?= base_url('datamaster/tambahkaryawan') ?>" class="btn btn-primary"><i class="bi bi-plus-lg"></i>Tambah Karyawan</a>
                  </div>
              </div>
@@ -38,9 +38,9 @@
                              <td><?= generateGender($row['gender']) ?></td>
                              <td><?= generateStatusPerkawinan($row['marital_status']) ?></td>
                              <td>
-                                 <a href=""><span class="badge bg-success">View</span></a>
-                                 <a href="<?= base_url('datamaster/editkaryawan/') . $row['user_id'] ?>"><span class="badge bg-warning">Edit</span></a>
-                                 <a href="" onclick="deleteKaryawan(<?= $row['user_id'] ?>)" data-user_id="<?= $row['user_id'] ?>"><span class="badge bg-danger">Delete</span></a>
+                                 <a href=""><span class="badge bg-warning">View</span></a>
+                                 <a href="<?= base_url('datamaster/editkaryawan/') . $row['user_id'] ?>"><span class="badge bg-success">Edit</span></a>
+                                 <a href="" id="delete<?= $row['user_id'] ?>" data-name="<?= $row['fullname'] ?>" onclick="deleteKaryawan(<?= $row['user_id'] ?>)"><span class="badge bg-danger">Delete</span></a>
                              </td>
                          </tr>
                      <?php endforeach; ?>
@@ -59,14 +59,17 @@
 
      function deleteKaryawan(user_id) {
          event.preventDefault()
+         var nik = document.getElementById('delete' + user_id)
+         var name = nik.getAttribute('data-name') // mengambil nama
          Swal.fire({
-             title: 'Are you sure?',
-             text: "You won't be able to revert this!",
+             title: 'Kamu akan menghapus karyawan ' + name,
+             text: "Data yang terhapus tidak bisa dikembalikan!",
              icon: 'warning',
              showCancelButton: true,
+             cancelButtonText: 'Batal',
              confirmButtonColor: '#3085d6',
              cancelButtonColor: '#d33',
-             confirmButtonText: 'Yes, delete it!'
+             confirmButtonText: 'Ya, hapus!'
          }).then((result) => {
              if (result.isConfirmed) {
                  $.ajax({
@@ -78,8 +81,8 @@
                      success: function(result) {
                          fetchKaryawan()
                          Swal.fire(
-                             'Deleted!',
-                             'Your file has been deleted.',
+                             'Terhapus!',
+                             'Karyawan berhasil dihapus.',
                              'success'
                          )
                      }
@@ -87,7 +90,6 @@
              }
          })
      }
-     fetchKaryawan()
 
      function fetchKaryawan() {
          $.ajax({
@@ -95,11 +97,13 @@
              type: 'post',
              dataType: 'json',
              success: function(result) {
-                 var tbody = '';
+
+                 var tbody = ''; // harus diluar for
                  var marital_status;
                  var gender;
                  var no = 1;
                  for (let i = 0; i < result.length; i++) {
+                     console.log(result[i])
                      if (result[i].marital_status == 'm') {
                          marital_status = 'Menikah'
                      } else if (result[i].marital_status == 'nm') {

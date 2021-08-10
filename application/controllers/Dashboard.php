@@ -20,7 +20,7 @@ class Dashboard extends CI_Controller
             'content'   => 'admin/dashboard',
             'head'      => 'Dashboard',
             'title'     => 'Dashboard',
-            'user'      => getUserAndLevel($this->session->userdata('login')['email'])
+            'navbar'      => getUserAndLevel($this->session->userdata('login')['email'])
         ];
         $this->load->view('templates/master', $data);
     }

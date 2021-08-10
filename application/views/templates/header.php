@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/dist/assets') ?>/vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" href="<?= base_url('assets/dist/assets') ?>/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="<?= base_url('assets/dist/assets') ?>/css/app.css">
-    <link rel="shortcut icon" href="<?= base_url('assets/dist/assets') ?>/images/favicon.svg" type="image/x-icon">
+    <!-- <link rel="shortcut icon" href="<?= base_url('assets/dist/assets') ?>/images/favicon.svg" type="image/x-icon"> -->
 
     <script src="<?= base_url('assets/js/jquery-3.6.0.min.js') ?>"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
